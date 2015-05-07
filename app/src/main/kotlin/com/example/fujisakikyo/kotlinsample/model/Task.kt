@@ -26,6 +26,7 @@ public class Task() : Model() {
             task.content = content
             task.created_at = date
             task.lastupdated_at = date
+            task.ischecked = false
             return task
         }
     }
@@ -43,5 +44,5 @@ public class Task() : Model() {
     var lastupdated_at: Date? = null
 
     Column(name = ISCHECKED)
-    var ischecked: Boolean? = false
+    var ischecked: Boolean = false
 }

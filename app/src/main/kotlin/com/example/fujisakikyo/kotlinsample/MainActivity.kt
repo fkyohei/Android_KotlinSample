@@ -1,5 +1,6 @@
 package com.example.fujisakikyo.kotlinsample
 
+import android.content.Intent
 import android.support.v7.app.ActionBarActivity
 import android.os.Bundle
 import android.view.Menu
@@ -8,15 +9,16 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import com.activeandroid.query.Select
+import com.example.fujisakikyo.kotlinsample.model.Task
 
 
 public class MainActivity : ActionBarActivity() {
 
-    var todoAddButton: Button? = null;
-    var todoListView: ListView? = null;
-    var todoAddtask: EditText? = null;
+    var todoAddButton: Button? = null
+    var todoListView: ListView? = null
+    var todoAddtask: EditText? = null
 //    var taskAdapter: TaskAdapter? = null;
-
+    var results: Task? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +30,25 @@ public class MainActivity : ActionBarActivity() {
     }
 
     fun loadTodoList() {
-        results = Select()
+        val taskadapter = TaskAdapter(this!!, { a, remain ->
+            var from = Select().from(javaClass<Task>())
+
+            from?.execute<Task>()
+                ?.forEach {
+                    a.add(it)
+                }
+        })
+
+        todoListView?.setAdapter(taskadapter)
+
+
+    }
+
+    fun openTodoEdit(Task task) {
+        val intent = Intent(this, javaClass<TaskEditActivity>())
+        intent.putExtra("task", task.getTask())
+        intent.putExtra("task_id", task.getId())
+        startActivity(intent)
     }
 
 
