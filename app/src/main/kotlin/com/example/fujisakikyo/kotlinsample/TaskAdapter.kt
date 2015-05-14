@@ -35,6 +35,10 @@ public class TaskAdapter(context: Context, val loader: ((TaskAdapter, List<Task>
         return view
     }
 
+    public trait OnItemClickListener {
+        public fun onItemClick(task: Task)
+    }
+
     class ViewHolder(root: View) {
 
         var checkBox: CheckBox? = null

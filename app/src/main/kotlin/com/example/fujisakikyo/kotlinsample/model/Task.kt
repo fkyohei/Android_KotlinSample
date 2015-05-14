@@ -10,7 +10,7 @@ import java.util.Date
  */
 
 Table(name = Task.TABLE_NAME)
-public class Task() : Model() {
+public class Task : Model() {
     companion  object {
         val TABLE_NAME = "Tasks"
         val ID = "Id"

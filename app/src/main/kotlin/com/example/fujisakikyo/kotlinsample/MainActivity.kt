@@ -30,13 +30,18 @@ public class MainActivity : ActionBarActivity() {
     }
 
     fun loadTodoList() {
-        val taskadapter = TaskAdapter(this!!, { a, remain ->
-            var from = Select().from(javaClass<Task>())
-
-            from?.execute<Task>()
-                ?.forEach {
-                    a.add(it)
-                }
+//        { a, remain ->
+//            var from = Select().from(javaClass<Task>())
+//
+//            from?.execute<Task>()
+//                    ?.forEach {
+//                        a.add(it)
+//                    },
+//        }
+        val taskadapter = TaskAdapter(this, TaskAdapter.OnItemClickListener() {
+            public fun onItemClick(task: Task) {
+                openTodoEdit(task)
+            }
         })
 
         todoListView?.setAdapter(taskadapter)
@@ -44,10 +49,10 @@ public class MainActivity : ActionBarActivity() {
 
     }
 
-    fun openTodoEdit(Task task) {
+    fun openTodoEdit(task: Task) {
         val intent = Intent(this, javaClass<TaskEditActivity>())
-        intent.putExtra("task", task.getTask())
-        intent.putExtra("task_id", task.getId())
+        intent.putExtra("task", task.content)
+        intent.putExtra("task_id", task.id)
         startActivity(intent)
     }
 
