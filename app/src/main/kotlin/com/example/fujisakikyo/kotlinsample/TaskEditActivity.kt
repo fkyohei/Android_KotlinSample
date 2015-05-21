@@ -29,10 +29,10 @@ public class TaskEditActivity : ActionBarActivity() {
         var strTask: String? = getIntent().getStringExtra("task")
         var strId: Int? = getIntent().getExtras().getInt("task_id")
         taskEdit!!.setText(strTask)
-        task = Select().from(javaClass<Task>())
-                ?.where("${Task.ID} = ?", strId)
-                ?.limit(1)
-                ?.execute()
+//        task = Select().from(javaClass<Task>())
+//                ?.where("${Task.ID} = ?", strId)
+//                ?.limit(1)
+//                ?.execute()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -44,7 +44,7 @@ public class TaskEditActivity : ActionBarActivity() {
         var id: Int? = item.getItemId()
         if( id == R.id.action_update) {
             var newText: String = taskEdit!!.getText().toString()
-            updateTask(task!!.id, newText, task!!.ischecked)
+            updateTask(task!!.Id, newText, task!!.isChecked)
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -57,15 +57,15 @@ public class TaskEditActivity : ActionBarActivity() {
 
         var date: Date = Date()
 
-        var newTask: Task? = Select().from(javaClass<Task>())
-                                ?.where("${Task.ID} = ?", id)
-                                ?.limit(1)
-                                ?.execute()
-
-        newTask!!.content = text
-        newTask!!.lastupdated_at = date
-        newTask!!.ischecked = ischecked
-        newTask!!.save()
+//        var newTask = Select().from(javaClass<Task>())
+//                                ?.where("${Task.ID} = ?", id)
+//                                ?.limit(1)
+//                                ?.execute()!!
+//
+//        newTask!!.content = text
+//        newTask!!.lastupdated_at = date
+//        newTask!!.ischecked = ischecked
+//        newTask!!.save()
 
         var intent: Intent = Intent(this, javaClass<MainActivity>())
         startActivity(intent)

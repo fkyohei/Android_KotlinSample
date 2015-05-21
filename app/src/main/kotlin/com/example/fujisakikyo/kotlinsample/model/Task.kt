@@ -22,27 +22,26 @@ public class Task : Model() {
         fun create(id: Int, content: String): Task {
             val date = Date()
             val task = Task()
-            task.id = id
-            task.content = content
-            task.created_at = date
-            task.lastupdated_at = date
-            task.ischecked = false
+            task.Id = id
+            task.Content = content
+            task.Created_at = date
+            task.Lastupdated_at = date
+            task.isChecked = false
             return task
         }
     }
 
-    Column(name = ID)
-    var id: Int? = 0
+    var Id: Int = 0
 
     Column(name = CONTENT)
-    var content: String? = null
+    var Content: String? = null
 
     Column(name = CREATED_AT)
-    var created_at: Date? = null
+    var Created_at: Date? = null
 
     Column(name = LASTUPDETED_AT)
-    var lastupdated_at: Date? = null
+    var Lastupdated_at: Date? = null
 
     Column(name = ISCHECKED)
-    var ischecked: Boolean = false
+    var isChecked: Boolean = false
 }

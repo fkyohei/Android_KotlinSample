@@ -1,8 +1,10 @@
 package com.example.fujisakikyo.kotlinsample
 
 import android.content.Context
+import android.support.v7.internal.widget.AdapterViewCompat
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.TextView
@@ -13,6 +15,8 @@ import java.text.SimpleDateFormat
  * Created by fujisakikyo on 15/05/07.
  */
 public class TaskAdapter(context: Context, val loader: ((TaskAdapter, List<Task>?) -> Unit)) : ArrayAdapter<Task>(context, -1) {
+
+    var results: List<Task>? = null
 
     companion object {
         var FORMAT = SimpleDateFormat("yyyy/MM/dd HH:mm")
@@ -26,17 +30,23 @@ public class TaskAdapter(context: Context, val loader: ((TaskAdapter, List<Task>
         }
         var holder: ViewHolder? = view?.getTag() as ViewHolder
         val item = getItem(position)
-        if( item?.created_at != null) {
-            holder?.created_at?.setText(FORMAT.format(item?.created_at))
+        if( item?.Created_at != null) {
+            holder?.created_at?.setText(FORMAT.format(item?.Created_at))
         }
-        holder?.todoText?.setText(item?.content)
-        holder?.checkBox?.setChecked(item.ischecked)
+        holder?.todoText?.setText(item?.Content)
+        holder?.checkBox?.setChecked(item.isChecked)
 
         return view
     }
 
-    public trait OnItemClickListener {
-        public fun onItemClick(task: Task)
+    fun OnItemClickListener() {
+        fun onItemClick(task: Task) {
+
+        }
+    }
+
+    fun setResult(result: List<Task>?) {
+        this.results = result
     }
 
     class ViewHolder(root: View) {
