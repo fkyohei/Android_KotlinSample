@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 /**
  * Created by fujisakikyo on 15/05/07.
  */
-public class TaskAdapter(context: Context, val loader: ((TaskAdapter, List<Task>?) -> Unit)) : ArrayAdapter<Task>(context, -1) {
+public class TaskAdapter(context: Context, val loader: (List<Task>?)) : ArrayAdapter<Task>(context, -1) {
 
     var results: List<Task>? = null
 
@@ -39,15 +39,15 @@ public class TaskAdapter(context: Context, val loader: ((TaskAdapter, List<Task>
         return view
     }
 
-    fun OnItemClickListener() {
-        fun onItemClick(task: Task) {
+//    fun AdapterView.OnItemClickListener() {
+//        fun onItemClick(task: Task) {
+//
+//        }
+//    }
 
-        }
-    }
-
-    fun setResult(result: List<Task>?) {
-        this.results = result
-    }
+//    fun setResult(result: List<Task>?) {
+//        this.results = result
+//    }
 
     class ViewHolder(root: View) {
 

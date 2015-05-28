@@ -29,13 +29,12 @@ public class MainActivity : ActionBarActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         todoAddButton = findViewById(R.id.addbtn) as Button
-        todoAddButton!!.setOnClickListener {
-            var todoAddTask: EditText? = findViewById(R.id.addTask) as EditText
-
-            if( todoAddtask!!.getText().toString() != "" ) {
+        todoAddButton!!.setOnClickListener { view ->
+            var todoAddTask: EditText = findViewById(R.id.addTask) as EditText
+            Log.d("debug", todoAddTask.getText().toString())
+            if( todoAddTask.getText().toString() != "" ) {
                 val current_date = Date()
 
-                Log.d("debug", "insert_pre")
                 var newTask: Task = Task()
                 newTask.Content = todoAddTask!!.getText().toString()
                 newTask.Created_at = current_date
@@ -43,7 +42,6 @@ public class MainActivity : ActionBarActivity() {
                 newTask.isChecked = false
 
                 newTask.save()
-                Log.d("debug", "insert_aft")
                 todoAddTask!!.setText("")
             }
             loadTodoList()
@@ -57,21 +55,27 @@ public class MainActivity : ActionBarActivity() {
     fun loadTodoList() {
 
         var listdata: List<Task>? = Select()?.from(javaClass<Task>())?.execute()
+        Log.d("debug", listdata.toString())
 //        todoListView.setOnItemClickListener(TaskAdapter.onItemClickListener() {
 //            fun onItemClick(task: Task) {
 //                open
 //            }
 //        })
 
-//        val taskadapter = TaskAdapter(this, TaskAdapter.OnItemClickListener() {
+        var taskadapter = TaskAdapter(this, listdata)
+
+//        val taskadapter = TaskAdapter(this@MainActivity, TaskAdapter.OnItemClickListener() {
 //            fun onItemClick(task: Task) {
 //                openTodoEdit(task)
 //            }
 //        })
 
 //        taskAdapter!!.setResult(listdata)
-//        todoListView?.setAdapter(taskAdapter)
+        todoListView?.setAdapter(taskAdapter)
 
+//        todoListView.setOnItemClickListener(object: OnItemClickListener {
+//
+//        })
 
     }
 
@@ -81,29 +85,6 @@ public class MainActivity : ActionBarActivity() {
         intent.putExtra("task_id", task.Id)
         startActivity(intent)
     }
-
-//    fun addTaskList(view: View) {
-//        var todoAddTask: EditText? = findViewById(R.id.addTask) as EditText
-//
-//        if( todoAddtask == null) {
-//            return;
-//        }
-//
-//        val current_date = Date()
-//
-//Log.d("debug", "insert_pre")
-//        var newTask: Task = Task()
-//        newTask.Content = todoAddTask as String
-//        newTask.Created_at = current_date
-//        newTask.Lastupdated_at = current_date
-//        newTask.isChecked = false
-//
-//        newTask.save()
-//Log.d("debug", "insert_aft")
-//        todoAddTask!!.setText("")
-//        loadTodoList()
-//    }
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

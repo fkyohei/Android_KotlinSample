@@ -23,8 +23,7 @@
         android:onClick="addTaskList"
         android:layout_alignBottom="@+id/addTask"
         android:layout_alignRight="@+id/addTask"
-        android:layout_alignEnd="@+id/addTask"
-        android:nestedScrollingEnabled="false" />
+        android:layout_alignEnd="@+id/addTask" />
 
     <ListView
         android:layout_width="wrap_content"
