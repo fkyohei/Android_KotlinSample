@@ -9,13 +9,15 @@ import android.view.MenuItem
 import android.widget.EditText
 import com.activeandroid.query.Select
 import com.example.fujisakikyo.kotlinsample.model.Task
+import java.util
+import java.util.ArrayList
 import java.util.Date
 
 /**
  * Created by fujisakikyo on 15/05/07.
  */
 public class TaskEditActivity : ActionBarActivity() {
-    var task: Task? = null
+//    var task
     var taskEdit: EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,10 +31,11 @@ public class TaskEditActivity : ActionBarActivity() {
         var strTask: String? = getIntent().getStringExtra("task")
         var strId: Int? = getIntent().getExtras().getInt("task_id")
         taskEdit!!.setText(strTask)
-//        task = Select().from(javaClass<Task>())
-//                ?.where("${Task.ID} = ?", strId)
-//                ?.limit(1)
-//                ?.execute()
+        var task = Select().from(javaClass<Task>())
+                ?.where("${Task.ID} = ?", strId)
+                ?.limit(1)
+                ?.execute<Task>()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

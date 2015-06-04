@@ -21,9 +21,6 @@ public class MainActivity : ActionBarActivity() {
 
     var todoAddButton: Button? = null
     var todoListView: ListView? = null
-    var todoAddtask: EditText? = null
-    var taskAdapter: TaskAdapter? = null;
-    var results: Task? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,36 +51,29 @@ public class MainActivity : ActionBarActivity() {
 
     fun loadTodoList() {
 
-        var listdata: List<Task>? = Select()?.from(javaClass<Task>())?.execute()
-        Log.d("debug", listdata.toString())
-//        todoListView.setOnItemClickListener(TaskAdapter.onItemClickListener() {
-//            fun onItemClick(task: Task) {
-//                open
-//            }
-//        })
+        var taskadapter = TaskAdapter(this, {a, remain ->
+            var from = Select().from(javaClass<Task>())
 
-        var taskadapter = TaskAdapter(this, listdata)
+            remain?.forEach {
+                from = from?.where("id!=?", it.getId())
+            }
+            from?.orderBy("${Task.CREATED_AT} desc")
+                    ?.execute<Task>()
+                    ?.forEach {
+                        a.add(it)
+                    }
+        })
 
-//        val taskadapter = TaskAdapter(this@MainActivity, TaskAdapter.OnItemClickListener() {
-//            fun onItemClick(task: Task) {
-//                openTodoEdit(task)
-//            }
-//        })
+        todoListView?.setAdapter(taskadapter)
 
-//        taskAdapter!!.setResult(listdata)
-        todoListView?.setAdapter(taskAdapter)
+        todoListView?.setOnItemClickListener {
+            parent, view, position, id ->
+            val intent = Intent(this, javaClass<TaskEditActivity>())
+            intent.putExtra("task", taskadapter.getItemId(position))
+            intent.putExtra("task_id", taskadapter.getItemId(position))
+            startActivity(intent)
+        }
 
-//        todoListView.setOnItemClickListener(object: OnItemClickListener {
-//
-//        })
-
-    }
-
-    fun openTodoEdit(task: Task) {
-        val intent = Intent(this, javaClass<TaskEditActivity>())
-        intent.putExtra("task", task.Content)
-        intent.putExtra("task_id", task.Id)
-        startActivity(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
