@@ -11,27 +11,37 @@ import java.util.Date
 
 Table(name = Task.TABLE_NAME)
 public class Task : Model() {
-    companion  object {
+    companion object {
         val TABLE_NAME = "Tasks"
         val ID = "Id"
-        val CONTENT = "Content"
-        val CREATED_AT = "Created_at"
-        val LASTUPDETED_AT = "LastUpdated_at"
-        val ISCHECKED = " isChecked"
+        val CONTENT = "content"
+        val CREATED_AT = "created_at"
+        val LASTUPDETED_AT = "lastupdated_at"
+        val ISCHECKED = " ischecked"
 
-        fun create(id: Int, content: String): Task {
+        fun create(content: String): Task {
             val date = Date()
             val task = Task()
-            task.Id = id
             task.Content = content
             task.Created_at = date
             task.Lastupdated_at = date
             task.isChecked = false
             return task
         }
+
+        fun update(id: Integer, content: String, created_at: Date, ischecked: Boolean): Task {
+            val date = Date()
+            val task = Task()
+            task.Id = id
+            task.Content = content
+            task.Created_at = created_at
+            task.Lastupdated_at = date
+            task.isChecked = ischecked
+            return task
+        }
     }
 
-    var Id: Int = 0
+    var Id: Integer? = null
 
     Column(name = CONTENT)
     var Content: String? = null

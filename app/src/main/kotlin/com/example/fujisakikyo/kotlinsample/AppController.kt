@@ -10,6 +10,10 @@ import com.activeandroid.Configuration
  */
 class AppController: Application() {
 
+    companion object {
+        val DB_NAME = "KotlinSample.db"
+    }
+
     override fun onCreate() {
         super<Application>.onCreate()
         init()
@@ -22,15 +26,15 @@ class AppController: Application() {
 
     fun init() {
         Log.d("AppController", "init")
-        var builder: Configuration.Builder = Configuration.Builder(getBaseContext());
-        builder.setCacheSize(1024*1024*4);
-        builder.setDatabaseName("KotlinSample.db");
-        builder.setDatabaseVersion(1);
-        ActiveAndroid.initialize(builder.create(), true);
-        var mInstance = this;
+        val builder = Configuration.Builder(getBaseContext())
+                    ?.setDatabaseName(DB_NAME)
+                    ?.setDatabaseVersion(2)
+                    ?.create()
+        ActiveAndroid.initialize(builder)
     }
 
     fun terminate() {
         ActiveAndroid.dispose()
     }
+
 }

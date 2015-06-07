@@ -24,19 +24,15 @@ public class MainActivity : ActionBarActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("debug", "MainActivity.onCreate")
         setContentView(R.layout.activity_main)
         todoAddButton = findViewById(R.id.addbtn) as Button
         todoAddButton!!.setOnClickListener { view ->
             var todoAddTask: EditText = findViewById(R.id.addTask) as EditText
             Log.d("debug", todoAddTask.getText().toString())
             if( todoAddTask.getText().toString() != "" ) {
-                val current_date = Date()
 
-                var newTask: Task = Task()
-                newTask.Content = todoAddTask!!.getText().toString()
-                newTask.Created_at = current_date
-                newTask.Lastupdated_at = current_date
-                newTask.isChecked = false
+                var newTask: Task = Task.create(todoAddTask!!.getText().toString())
 
                 newTask.save()
                 todoAddTask!!.setText("")
@@ -50,12 +46,12 @@ public class MainActivity : ActionBarActivity() {
     }
 
     fun loadTodoList() {
-
+        Log.d("debug", "loadTodoList")
         var taskadapter = TaskAdapter(this, {a, remain ->
             var from = Select().from(javaClass<Task>())
 
             remain?.forEach {
-                from = from?.where("id!=?", it.getId())
+                from = from?.where("${Task.ID}=?", it.getId())
             }
             from?.orderBy("${Task.CREATED_AT} desc")
                     ?.execute<Task>()
@@ -89,7 +85,7 @@ public class MainActivity : ActionBarActivity() {
         val id = item.getItemId()
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_delete) {
             return true
         }
 

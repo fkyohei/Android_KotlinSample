@@ -17,7 +17,7 @@ import java.util.Date
  * Created by fujisakikyo on 15/05/07.
  */
 public class TaskEditActivity : ActionBarActivity() {
-//    var task
+    var task: kotlin.List<Task>? = null
     var taskEdit: EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +31,7 @@ public class TaskEditActivity : ActionBarActivity() {
         var strTask: String? = getIntent().getStringExtra("task")
         var strId: Int? = getIntent().getExtras().getInt("task_id")
         taskEdit!!.setText(strTask)
-        var task = Select().from(javaClass<Task>())
+        task = Select().from(javaClass<Task>())
                 ?.where("${Task.ID} = ?", strId)
                 ?.limit(1)
                 ?.execute<Task>()
@@ -47,7 +47,7 @@ public class TaskEditActivity : ActionBarActivity() {
         var id: Int? = item.getItemId()
         if( id == R.id.action_update) {
             var newText: String = taskEdit!!.getText().toString()
-            updateTask(task!!.Id, newText, task!!.isChecked)
+//            updateTask(task!!.Id, newText, task!!.isChecked)
             return true
         }
         return super.onOptionsItemSelected(item)
