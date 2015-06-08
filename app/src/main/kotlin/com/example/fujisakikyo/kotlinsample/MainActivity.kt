@@ -10,22 +10,24 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
+import com.activeandroid.query.Delete
 import com.activeandroid.query.Select
 import com.example.fujisakikyo.kotlinsample.model.Task
-
-import java.util.Date
-import java.util.Random
+import java.util.*
 
 
 public class MainActivity : ActionBarActivity() {
 
     var todoAddButton: Button? = null
     var todoListView: ListView? = null
+    var taskadapter: TaskAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("debug", "MainActivity.onCreate")
         setContentView(R.layout.activity_main)
+
+        // addボタンのクリックイベントを追加
         todoAddButton = findViewById(R.id.addbtn) as Button
         todoAddButton!!.setOnClickListener { view ->
             var todoAddTask: EditText = findViewById(R.id.addTask) as EditText
@@ -41,13 +43,16 @@ public class MainActivity : ActionBarActivity() {
         }
 
         todoListView = findViewById(R.id.listView) as ListView
-
+Log.d("debug", "MainActivity_todoListView")
+Log.d("debug", todoListView.toString())
+        // リスト表示
         loadTodoList()
     }
 
     fun loadTodoList() {
         Log.d("debug", "loadTodoList")
-        var taskadapter = TaskAdapter(this, {a, remain ->
+        // データを取得して、リストに当て込む
+        taskadapter = TaskAdapter(this, {a, remain ->
             var from = Select().from(javaClass<Task>())
 
             remain?.forEach {
@@ -62,11 +67,13 @@ public class MainActivity : ActionBarActivity() {
 
         todoListView?.setAdapter(taskadapter)
 
+        // 各リストのクリックイベントを追加
         todoListView?.setOnItemClickListener {
             parent, view, position, id ->
             val intent = Intent(this, javaClass<TaskEditActivity>())
-            intent.putExtra("task", taskadapter.getItemId(position))
-            intent.putExtra("task_id", taskadapter.getItemId(position))
+            intent.putExtra("task_id", taskadapter?.getItem(position)?.Id as Int)
+            intent.putExtra("task", taskadapter?.getItem(position)?.Content)
+            intent.putExtra("task_ischecked", taskadapter?.getItem(position)!!.isChecked)
             startActivity(intent)
         }
 
@@ -84,11 +91,23 @@ public class MainActivity : ActionBarActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.getItemId()
 
-        //noinspection SimplifiableIfStatement
+        // チェックしたタスクを削除
         if (id == R.id.action_delete) {
-            return true
+            deleteCheckedTask()
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    fun deleteCheckedTask() {
+        // 複数削除用のチェックした項目を習得
+        var checkedTaskList: ArrayList<Task>? = taskadapter?.getCheckedTaskList()
+        checkedTaskList?.forEach {
+            // 削除実行
+             Delete().from(javaClass<Task>())
+                    ?.where("${Task.ID} = ?", it.Id)
+                    ?.execute<Task>()
+        }
+
     }
 }

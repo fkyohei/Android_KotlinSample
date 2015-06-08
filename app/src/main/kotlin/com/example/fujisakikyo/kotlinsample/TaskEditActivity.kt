@@ -28,8 +28,8 @@ public class TaskEditActivity : ActionBarActivity() {
     }
 
     fun setupUi() {
-        var strTask: String? = getIntent().getStringExtra("task")
         var strId: Int? = getIntent().getExtras().getInt("task_id")
+        var strTask: String? = getIntent().getStringExtra("task")
         taskEdit!!.setText(strTask)
         task = Select().from(javaClass<Task>())
                 ?.where("${Task.ID} = ?", strId)
@@ -45,34 +45,29 @@ public class TaskEditActivity : ActionBarActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var id: Int? = item.getItemId()
+        var taskId: Integer? = getIntent().getExtras().getInt("task_id") as Integer
+        var task_ischecked: Boolean = getIntent().getBooleanExtra("task_ischecked", false)
         if( id == R.id.action_update) {
             var newText: String = taskEdit!!.getText().toString()
-//            updateTask(task!!.Id, newText, task!!.isChecked)
+            // 更新処理
+            updateTask(taskId, newText, task_ischecked)
             return true
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun updateTask(id: Int?, text: String, ischecked: Boolean) {
+    fun updateTask(id: Integer?, text: String, ischecked: Boolean) {
         if( TextUtils.isEmpty(text)) {
             return;
         }
 
         var date: Date = Date()
 
-//        var newTask = Select().from(javaClass<Task>())
-//                                ?.where("${Task.ID} = ?", id)
-//                                ?.limit(1)
-//                                ?.execute()!!
-//
-//        newTask!!.content = text
-//        newTask!!.lastupdated_at = date
-//        newTask!!.ischecked = ischecked
-//        newTask!!.save()
+        var task: Task = Task.update(id, text, date, ischecked)
+        task.save()
 
         var intent: Intent = Intent(this, javaClass<MainActivity>())
         startActivity(intent)
-
     }
 
 }
