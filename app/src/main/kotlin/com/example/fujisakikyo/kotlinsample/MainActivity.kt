@@ -18,20 +18,18 @@ import java.util.*
 
 public class MainActivity : ActionBarActivity() {
 
-    var todoAddButton: Button? = null
-    var todoListView: ListView? = null
+    var taskAddButton: Button? = null
+    var taskListView: ListView? = null
     var taskadapter: TaskAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("debug", "MainActivity.onCreate")
         setContentView(R.layout.activity_main)
 
         // addボタンのクリックイベントを追加
-        todoAddButton = findViewById(R.id.addbtn) as Button
-        todoAddButton!!.setOnClickListener { view ->
+        taskAddButton = findViewById(R.id.addbtn) as Button
+        taskAddButton!!.setOnClickListener { view ->
             var todoAddTask: EditText = findViewById(R.id.addTask) as EditText
-            Log.d("debug", todoAddTask.getText().toString())
             if( todoAddTask.getText().toString() != "" ) {
 
                 var newTask: Task = Task.create(todoAddTask!!.getText().toString())
@@ -42,36 +40,25 @@ public class MainActivity : ActionBarActivity() {
             loadTodoList()
         }
 
-        todoListView = findViewById(R.id.listView) as ListView
-Log.d("debug", "MainActivity_todoListView")
-Log.d("debug", todoListView.toString())
+        taskListView = findViewById(R.id.listView) as ListView
         // リスト表示
         loadTodoList()
     }
 
     fun loadTodoList() {
-        Log.d("debug", "loadTodoList")
         // データを取得して、リストに当て込む
-        taskadapter = TaskAdapter(this, {a, remain ->
-            var from = Select().from(javaClass<Task>())
-
-            remain?.forEach {
-                from = from?.where("${Task.ID}=?", it.getId())
-            }
-            from?.orderBy("${Task.CREATED_AT} desc")
-                    ?.execute<Task>()
-                    ?.forEach {
-                        a.add(it)
-                    }
-        })
-
-        todoListView?.setAdapter(taskadapter)
+        var taskdata = Select().from(javaClass<Task>()).execute<Task>()
+        taskadapter = TaskAdapter(this)
+        taskdata.forEach {
+        taskadapter?.add(it)
+        }
+        taskListView?.setAdapter(taskadapter)
 
         // 各リストのクリックイベントを追加
-        todoListView?.setOnItemClickListener {
+        taskListView?.setOnItemClickListener {
             parent, view, position, id ->
             val intent = Intent(this, javaClass<TaskEditActivity>())
-            intent.putExtra("task_id", taskadapter?.getItem(position)?.Id as Int)
+            intent.putExtra("task_id", taskadapter?.getItem(position)?.Id!!)
             intent.putExtra("task", taskadapter?.getItem(position)?.Content)
             intent.putExtra("task_ischecked", taskadapter?.getItem(position)!!.isChecked)
             startActivity(intent)

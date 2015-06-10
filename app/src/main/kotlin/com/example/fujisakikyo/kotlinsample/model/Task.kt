@@ -29,7 +29,7 @@ public class Task : Model() {
             return task
         }
 
-        fun update(id: Integer?, content: String, created_at: Date, ischecked: Boolean): Task {
+        fun update(id: Int, content: String, created_at: Date, ischecked: Boolean): Task {
             val date = Date()
             val task = Task()
             task.Id = id
@@ -41,7 +41,7 @@ public class Task : Model() {
         }
     }
 
-    var Id: Integer? = null
+    var Id: Int = 0
 
     Column(name = CONTENT)
     var Content: String? = null

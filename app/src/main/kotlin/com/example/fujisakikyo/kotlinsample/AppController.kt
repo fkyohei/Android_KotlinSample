@@ -25,7 +25,6 @@ class AppController: Application() {
     }
 
     fun init() {
-        Log.d("AppController", "init")
         val builder = Configuration.Builder(getBaseContext())
                     ?.setDatabaseName(DB_NAME)
                     ?.setDatabaseVersion(2)

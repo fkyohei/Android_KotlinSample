@@ -28,14 +28,13 @@ public class TaskEditActivity : ActionBarActivity() {
     }
 
     fun setupUi() {
-        var strId: Int? = getIntent().getExtras().getInt("task_id")
-        var strTask: String? = getIntent().getStringExtra("task")
+        val Id: Int = getIntent().getExtras().getInt("task_id")
+        val strTask: String? = getIntent().getStringExtra("task")
         taskEdit!!.setText(strTask)
         task = Select().from(javaClass<Task>())
-                ?.where("${Task.ID} = ?", strId)
+                ?.where("${Task.ID} = ?", Id)
                 ?.limit(1)
                 ?.execute<Task>()
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -44,11 +43,11 @@ public class TaskEditActivity : ActionBarActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var id: Int? = item.getItemId()
-        var taskId: Integer? = getIntent().getExtras().getInt("task_id") as Integer
-        var task_ischecked: Boolean = getIntent().getBooleanExtra("task_ischecked", false)
+        val id: Int? = item.getItemId()
+        val taskId: Int = getIntent().getExtras().getInt("task_id")
+        val task_ischecked: Boolean = getIntent().getBooleanExtra("task_ischecked", false)
         if( id == R.id.action_update) {
-            var newText: String = taskEdit!!.getText().toString()
+            val newText: String = taskEdit!!.getText().toString()
             // 更新処理
             updateTask(taskId, newText, task_ischecked)
             return true
@@ -56,17 +55,19 @@ public class TaskEditActivity : ActionBarActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun updateTask(id: Integer?, text: String, ischecked: Boolean) {
+    fun updateTask(id: Int, text: String, ischecked: Boolean) {
         if( TextUtils.isEmpty(text)) {
             return;
         }
 
-        var date: Date = Date()
+        val date: Date = Date()
 
-        var task: Task = Task.update(id, text, date, ischecked)
+        // 更新
+        val task: Task = Task.update(id, text, date, ischecked)
         task.save()
 
-        var intent: Intent = Intent(this, javaClass<MainActivity>())
+        // リスト画面に遷移
+        val intent: Intent = Intent(this, javaClass<MainActivity>())
         startActivity(intent)
     }
 
