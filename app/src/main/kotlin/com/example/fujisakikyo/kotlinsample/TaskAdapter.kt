@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.activeandroid.query.Select
 import com.example.fujisakikyo.kotlinsample.model.Task
 import java.text.SimpleDateFormat
 import java.util.*
@@ -34,17 +35,34 @@ public class TaskAdapter(context: Context) : ArrayAdapter<Task>(context, -1) {
             holder = view?.getTag() as ViewHolder
         }
 
+        // 表示する要素をリストにセット
         val item = getItem(position)
         holder?.todoText?.setText(item?.Content)
-        holder?.created_at?.setText(FORMAT.format(item?.Created_at))
+        holder?.created_at?.setText(FORMAT.format(item?.Lastupdated_at))
         holder?.checkBox?.setChecked(item.isChecked)
 
+        // リスト各要素のチェックボックスのクリックイベントを追加
+        holder?.checkBox?.setOnCheckedChangeListener(object: CompoundButton.OnCheckedChangeListener {
+            override fun onCheckedChanged(buttonView: CompoundButton, ischecked: Boolean) {
+                val date: Date = Date()
+                val taskId: Integer = Integer(item.getId().toString())
+                val task: kotlin.List<Task>? = Select().from(javaClass<Task>())
+                        ?.where("${Task.ID} = ?", taskId)
+                        ?.limit(1)
+                        ?.execute<Task>()
+
+                // 更新
+                task?.first()?.isChecked = ischecked
+                task?.first()?.Lastupdated_at = date
+                task?.first()?.save()
+            }
+        })
         return view
     }
 
     fun getCheckedTaskList(): ArrayList<Task> {
        val checkedTaskList = ArrayList<Task>()
-        for(i in 0 .. getCount()) {
+        for(i in 0 .. getCount()-1) {
             val task: Task = getItem(i)
             if( task.isChecked) {
                 checkedTaskList.add(task)

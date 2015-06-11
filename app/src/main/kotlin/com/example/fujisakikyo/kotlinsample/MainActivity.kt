@@ -53,14 +53,12 @@ public class MainActivity : ActionBarActivity() {
         taskadapter?.add(it)
         }
         taskListView?.setAdapter(taskadapter)
-
         // 各リストのクリックイベントを追加
         taskListView?.setOnItemClickListener {
             parent, view, position, id ->
             val intent = Intent(this, javaClass<TaskEditActivity>())
-            intent.putExtra("task_id", taskadapter?.getItem(position)?.Id!!)
+            intent.putExtra("task_id", taskadapter?.getItem(position)?.getId().toString())
             intent.putExtra("task", taskadapter?.getItem(position)?.Content)
-            intent.putExtra("task_ischecked", taskadapter?.getItem(position)!!.isChecked)
             startActivity(intent)
         }
 
@@ -92,9 +90,10 @@ public class MainActivity : ActionBarActivity() {
         checkedTaskList?.forEach {
             // 削除実行
              Delete().from(javaClass<Task>())
-                    ?.where("${Task.ID} = ?", it.Id)
+                    ?.where("${Task.ID} = ?", Integer(it.getId().toString()))
                     ?.execute<Task>()
         }
-
+        // リストデータ更新
+        loadTodoList()
     }
 }

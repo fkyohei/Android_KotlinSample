@@ -13,7 +13,7 @@ Table(name = Task.TABLE_NAME)
 public class Task : Model() {
     companion object {
         val TABLE_NAME = "Tasks"
-        val ID = "Id"
+        val ID = "id"
         val CONTENT = "content"
         val CREATED_AT = "created_at"
         val LASTUPDETED_AT = "lastupdated_at"
@@ -29,19 +29,9 @@ public class Task : Model() {
             return task
         }
 
-        fun update(id: Int, content: String, created_at: Date, ischecked: Boolean): Task {
-            val date = Date()
-            val task = Task()
-            task.Id = id
-            task.Content = content
-            task.Created_at = created_at
-            task.Lastupdated_at = date
-            task.isChecked = ischecked
-            return task
-        }
     }
 
-    var Id: Int = 0
+    var Id: Integer? = null
 
     Column(name = CONTENT)
     var Content: String? = null

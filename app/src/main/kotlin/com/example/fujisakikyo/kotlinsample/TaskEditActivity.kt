@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.ActionBarActivity
 import android.text.TextUtils
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
@@ -28,11 +29,11 @@ public class TaskEditActivity : ActionBarActivity() {
     }
 
     fun setupUi() {
-        val Id: Int = getIntent().getExtras().getInt("task_id")
+        val taskId: Integer = Integer(getIntent().getExtras().getString("task_id"))
         val strTask: String? = getIntent().getStringExtra("task")
         taskEdit!!.setText(strTask)
         task = Select().from(javaClass<Task>())
-                ?.where("${Task.ID} = ?", Id)
+                ?.where("${Task.ID} = ?", taskId)
                 ?.limit(1)
                 ?.execute<Task>()
     }
@@ -44,18 +45,16 @@ public class TaskEditActivity : ActionBarActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id: Int? = item.getItemId()
-        val taskId: Int = getIntent().getExtras().getInt("task_id")
-        val task_ischecked: Boolean = getIntent().getBooleanExtra("task_ischecked", false)
         if( id == R.id.action_update) {
             val newText: String = taskEdit!!.getText().toString()
             // 更新処理
-            updateTask(taskId, newText, task_ischecked)
+            updateTask(newText)
             return true
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun updateTask(id: Int, text: String, ischecked: Boolean) {
+    fun updateTask(text: String) {
         if( TextUtils.isEmpty(text)) {
             return;
         }
@@ -63,8 +62,9 @@ public class TaskEditActivity : ActionBarActivity() {
         val date: Date = Date()
 
         // 更新
-        val task: Task = Task.update(id, text, date, ischecked)
-        task.save()
+        task?.first()?.Content = text
+        task?.first()?.Lastupdated_at = date
+        task?.first()?.save()
 
         // リスト画面に遷移
         val intent: Intent = Intent(this, javaClass<MainActivity>())
