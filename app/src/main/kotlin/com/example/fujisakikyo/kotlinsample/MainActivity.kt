@@ -15,7 +15,9 @@ import com.activeandroid.query.Select
 import com.example.fujisakikyo.kotlinsample.model.Task
 import java.util.*
 
-
+/**
+ * Created by fujisakikyo on 15/05/07.
+ */
 public class MainActivity : ActionBarActivity() {
 
     var taskAddButton: Button? = null
@@ -50,7 +52,7 @@ public class MainActivity : ActionBarActivity() {
         var taskdata = Select().from(javaClass<Task>()).execute<Task>()
         taskadapter = TaskAdapter(this)
         taskdata.forEach {
-        taskadapter?.add(it)
+            taskadapter?.add(it)
         }
         taskListView?.setAdapter(taskadapter)
         // 各リストのクリックイベントを追加

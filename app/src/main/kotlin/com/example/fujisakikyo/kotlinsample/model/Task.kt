@@ -13,11 +13,11 @@ Table(name = Task.TABLE_NAME)
 public class Task : Model() {
     companion object {
         val TABLE_NAME = "Tasks"
-        val ID = "id"
+        val ID = "Id"
         val CONTENT = "content"
         val CREATED_AT = "created_at"
         val LASTUPDETED_AT = "lastupdated_at"
-        val ISCHECKED = " ischecked"
+        val ISCHECKED = "ischecked"
 
         fun create(content: String): Task {
             val date = Date()
